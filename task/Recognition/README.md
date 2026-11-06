@@ -138,7 +138,7 @@ python evaluate.py   # 加载权重，在测试集上评估
 ## 权重
 
 - 权重文件：`cifar10_cnn.pth`（约 2.2MB）
-- 下载链接：（提交前通过 GitHub Release 上传后补充）
+- 下载链接：https://github.com/Gu-Yingying/my-git-test/releases/tag/v1.0-recognition
 - 使用方法：将权重放到 `src/` 目录，执行 `python evaluate.py`；已有权重时无需重新训练
 
 ## 未完成项
