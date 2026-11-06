@@ -1,1 +1,12 @@
 /.reference/
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 数据集与模型权重
+task/Recognition/src/data/
+*.pth
+
+# 虚拟环境
+.venv/
+venv/

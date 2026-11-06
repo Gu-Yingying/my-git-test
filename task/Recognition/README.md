@@ -61,3 +61,86 @@ bash test.sh
 环境配置见[环境准备](../../ENV_SETUP.md)，神经网络与 PyTorch 教程见[学习资料与路径](../../LEARNING_RESOURCES.md)。
 
 [返回培训考核首页](../../README.md)
+
+
+
+
+
+
+
+
+
+训练结果：
+
+
+
+# 目标识别任务（CIFAR-10 CNN 分类）
+
+使用 PyTorch 实现并训练 CNN，完成 CIFAR-10 十分类。本 README 记录环境、命令与实际运行结果。
+
+## 环境
+
+- 操作系统：Windows（x64）
+- Python 3.12.14
+- PyTorch 2.14.1 + CUDA（显卡：NVIDIA RTX 5070 Ti）
+- torchvision 0.29.1
+
+依赖安装：
+
+```
+pip install torch torchvision
+```
+
+## 目录结构
+
+```
+task/Recognition/
+├── src/
+│   ├── model.py       # CNN 模型定义
+│   ├── train.py       # 训练并保存权重
+│   └── evaluate.py    # 加载权重并评估
+├── test.sh            # 一键训练+评估
+└── README.md
+```
+
+## 运行方法
+
+在仓库的 `task/Recognition` 目录下执行：
+
+```bash
+bash test.sh
+```
+
+或在 `src/` 目录下分步执行：
+
+```bash
+cd src
+python train.py      # 训练 10 轮，权重保存为 src/cifar10_cnn.pth
+python evaluate.py   # 加载权重，在测试集上评估
+```
+
+首次运行自动下载 CIFAR-10（约 170MB）到 `src/data/`。
+
+## 模型结构与数据处理方法
+
+- 模型（`src/model.py`）：两层卷积（Conv 3→32→64，各接 ReLU + MaxPool）+ 两层全连接（64·8·8→128→10），约 55 万参数。结构为自行设计，未引用外部模型。
+- 预处理：ToTensor 转张量，按 CIFAR-10 均值 (0.4914, 0.4822, 0.4465)、方差 (0.2470, 0.2435, 0.2616) 标准化。
+- 训练：CrossEntropyLoss + Adam（lr=1e-3），batch size 128，共 10 轮，设备为 GPU（cuda）。
+
+## 实际运行结果
+
+- 运行设备：NVIDIA RTX 5070 Ti（cuda）
+- 训练轮数：10（损失从 1.3282 降至 0.2353）
+- 测试集总样本数：10000，正确分类数：7183，**总体准确率 71.83%**
+- 各类别准确率：airplane 76.10%、automobile 86.00%、bird 61.30%、cat 42.50%、deer 67.30%、dog 69.20%、frog 83.40%、horse 69.10%、ship 83.00%、truck 79.60%
+- 样本输出示例（前 8 条）：true=cat, predicted=dog 等，完整见 `python evaluate.py` 输出
+
+## 权重
+
+- 权重文件：`cifar10_cnn.pth`（约 2.2MB）
+- 下载链接：（提交前通过 GitHub Release 上传后补充）
+- 使用方法：将权重放到 `src/` 目录，执行 `python evaluate.py`；已有权重时无需重新训练
+
+## 未完成项
+
+无。
